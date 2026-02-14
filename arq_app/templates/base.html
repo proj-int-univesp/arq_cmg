@@ -1,0 +1,141 @@
+<!-- templates/abon_app/base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}SisCA - Sistema de Controle de Arquivo{% endblock %}</title>
+    <!-- Link para o Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <style>
+        .bg-blk{
+            background-color: #000000;
+            color: white;
+        }
+
+        .bg-dtl{
+            background-color: #BD5200;
+            color: white;
+        }
+
+        .dtl-btn{
+            background-color: #BD5200;
+            color: white;
+        }
+
+        .add-btn{
+            background-color: #1B8014;
+            color: white;
+        }
+
+        .upd-btn{
+            background-color: #3E1C8C;
+            color: white;
+        }
+
+        .del-btn{
+            background-color: #93101D;
+            color: white;
+        }
+    </style>
+
+</head>
+<body class="bg-dark text-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-blk">
+        <div class="container-fluid">
+            <a class="navbar-brand text-warning" href="{% url 'menu' %}">Sistema de Controle de Arquivo</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">                
+
+                <ul class="navbar-nav">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'caixas' %}">Caixas de Arquivo</a>
+                    </li>
+ 
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'interessados' %}">Interessados</a>
+                    </li>
+                    
+                    {% if user.funcionario.analisa_ped_info %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ped_infos_analise' %}">Analisar Pedidos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ped_infos_geral' %}">Consulta Geral</a>
+                        </li>
+                    {% endif %}
+
+                    {% if user.funcionario %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ped_infos_fornecimento' %}">Fornecer Informações</a>
+                        </li>
+                    {% endif %}
+
+                    {% if user.funcionario.emite_parecer %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ped_infos_parecer' %}">Emitir Pareceres</a>
+                        </li>
+                    {% endif %}
+
+                    {% if user.funcionario.responde_ped_info %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ped_infos_resposta' %}">Responder Pedidos</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% if user.funcionario.responde_recurso_1 %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ped_infos_resp_rec_1' %}">Responder Recursos em 1ª Instância</a>
+                        </li>
+                    {% endif %}
+
+                    {% if user.funcionario.responde_recurso_2 %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ped_infos_resp_rec_2' %}">Responder Recursos em 2ª Instância</a>
+                        </li>
+                    {% endif %}                  
+
+                    {% if user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/">Configurações</a>
+                        </li>
+                    {% endif %}
+                </ul>
+                
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'logout' %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link nav-link" >
+                                    Sair
+                                </button>
+                            </form>
+                        </li>
+                    {% endif %}
+                </ul>              
+
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+          $('.dropdown-toggle').dropdown();
+        }); 
+    </script>
+</body>
+</html>

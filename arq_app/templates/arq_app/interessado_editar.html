@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Edição de Dados de Interessado{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-light bg-dark p-3 rounded text-center">Edição de Dados de Interessado</h1>
+    <div class="bg-blk p-4 rounded shadow">
+        <form method="post" class="text-light">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="text-center mt-3">
+                <button type="submit" class="btn upd-btn">Alterar</button>
+                <a href="{% url 'interessados' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

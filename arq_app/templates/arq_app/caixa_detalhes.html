@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Detalhes da Caixa de Arquivo{% endblock %}
+{% block content %}
+
+<div class="row">
+<div class="col-md-8 mx-auto mb-8">
+    <div class="card bg-secondary text-white">
+        <div class="card-header bg-dtl">
+            <h4><strong>Caixa de Arquivo nº {{caixa.numero}}</strong></h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Descrição:</strong> {{caixa.descricao}}</p>
+            <p><strong>Observações:</strong> {{caixa.observacoes|default_if_none:"-"}}</p>
+            <p><strong>Localização:</strong> {{caixa.cod_localizacao|default_if_none:"-"}}</p>
+            <a href="{% url 'caixas' %}" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}
