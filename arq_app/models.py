@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models, transaction
 
 class Numerador(models.Model):
@@ -139,6 +140,16 @@ class Documento(models.Model):
                                 verbose_name="Quantidade de Volumes")
     caixa = models.ForeignKey(CaixaDeArquivo, on_delete=models.PROTECT, blank=True, null=True, 
                                 related_name="documentos", verbose_name="Caixa de Arquivo")
+
+    def clean(self):
+        super().clean()
+        # Validação: documento não pode ser colocado em uma caixa com documentos de outro tipo documental
+        if self.caixa:
+            caixa_documentos = self.caixa.documentos.exclude(id=self.id)
+            if caixa_documentos.exists():
+                caixa_serie = caixa_documentos.first().serie_documental
+                if caixa_serie != self.serie_documental:
+                    raise ValidationError("O documento não pode ser colocado nesta caixa, pois ela contém documentos de outra série documental.")
     
     def __str__(self):
         return f"DOC{self.id}"

@@ -7,6 +7,11 @@
     <div class="bg-blk p-4 rounded shadow">
         <form method="post" class="text-light">
             {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
             <div class="mb-3">
                 <label for="id_serie_documental">Série Documental*</label><br>
                 {{ form.serie_documental }}
@@ -29,7 +34,7 @@
             </div>
             <div class="text-center mt-3">
                 <button type="submit" class="btn add-btn">Cadastrar</button>
-                <a href="{% url 'documentos' %}" class="btn btn-secondary">Cancelar</a>
+                <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

@@ -15,7 +15,7 @@
             <p><strong>Descrição:</strong> {{caixa.descricao}}</p>
             <p><strong>Observações:</strong> {{caixa.observacoes|default_if_none:"-"}}</p>
             <p><strong>Localização:</strong> {{caixa.cod_localizacao|default_if_none:"-"}}</p>
-            <a href="{% url 'caixas' %}" class="btn btn-secondary">Voltar</a>
+            <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Voltar</a>
         </div>
     </div>
 </div>

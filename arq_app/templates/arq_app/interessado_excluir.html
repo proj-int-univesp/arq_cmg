@@ -10,7 +10,7 @@
             <p>Tem certeza que deseja excluir o interessado <strong>{{ interessado }}</strong>?</p>
             <div class="text-center mt-3">
                 <button type="submit" class="btn del-btn">Excluir</button>
-                <a href="{% url 'interessados' %}" class="btn btn-secondary">Cancelar</a>
+                <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

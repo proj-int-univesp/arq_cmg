@@ -10,7 +10,7 @@
             {{ form|crispy }}
             <div class="text-center mt-3">
                 <button type="submit" class="btn add-btn">Cadastrar</button>
-                <a href="{% url 'caixas' %}" class="btn btn-secondary">Cancelar</a>
+                <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>
