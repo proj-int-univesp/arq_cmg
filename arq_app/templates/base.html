@@ -39,6 +39,13 @@
             background-color: #93101D;
             color: white;
         }
+
+        input[type="text"], select {
+            height: 36px; /* ajuste conforme necessário */
+            padding: 6px 12px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
     </style>
 
 </head>
@@ -55,6 +62,10 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'caixas' %}">Caixas de Arquivo</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'documentos' %}">Documentos</a>
                     </li>
  
                     <li class="nav-item">

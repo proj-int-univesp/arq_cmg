@@ -33,7 +33,7 @@ class FuncaoPC(models.Model):
 class SubFuncaoPC(models.Model):
     
     funcao_mae = models.ForeignKey(FuncaoPC, on_delete=models.PROTECT, 
-                                   verbose_name="Função Mãe")
+                                   related_name="subfuncoes", verbose_name="Função Mãe")
     codigo = models.CharField(max_length=5, unique=True, verbose_name="Código")
     nome = models.CharField(max_length=255, verbose_name="Nome")
 
@@ -47,7 +47,7 @@ class SubFuncaoPC(models.Model):
 class AtividadePC(models.Model):
     
     subfuncao_mae = models.ForeignKey(SubFuncaoPC, on_delete=models.PROTECT, 
-                                   verbose_name="Subfunção Mãe")
+                                   related_name="atividades", verbose_name="Subfunção Mãe")
     codigo = models.CharField(max_length=8, unique=True, verbose_name="Código")
     nome = models.CharField(max_length=255, verbose_name="Nome")
 
@@ -61,7 +61,7 @@ class AtividadePC(models.Model):
 class SerieDocumentalPC(models.Model):
     
     atividade_mae = models.ForeignKey(AtividadePC, on_delete=models.PROTECT, 
-                                   verbose_name="Atividade Mãe")
+                                   related_name="series_documentais", verbose_name="Atividade Mãe")
     codigo = models.CharField(max_length=11, unique=True, verbose_name="Código")
     nome = models.CharField(max_length=255, verbose_name="Nome")
     tipo_prazo_corrente = models.CharField(max_length=1, choices=[
@@ -120,3 +120,29 @@ class CaixaDeArquivo(models.Model):
     class Meta:
         verbose_name = "Caixa de Arquivo"
         verbose_name_plural = "Caixas de Arquivo"
+
+class Documento(models.Model):
+    serie_documental = models.ForeignKey(SerieDocumentalPC, on_delete=models.PROTECT, 
+                                related_name="documentos", verbose_name="Série Documental")
+    codigo_controle = models.CharField(max_length=30, blank=True, 
+                                verbose_name="Código de Controle")
+    codigo_protocolo = models.CharField(max_length=30, blank=True, 
+                                verbose_name="Código de Protocolo")
+    data_producao = models.DateField(verbose_name="Data de Produção")
+    interessado = models.ForeignKey(Interessado, on_delete=models.PROTECT, 
+                                related_name="documentos", verbose_name="Interessado")
+    assunto = models.CharField(max_length=255, 
+                                verbose_name="Assunto")
+    data_encerramento = models.DateField(blank=True, null=True, 
+                                verbose_name="Data de Encerramento")
+    quantidade_volumes = models.PositiveIntegerField(default=1, 
+                                verbose_name="Quantidade de Volumes")
+    caixa = models.ForeignKey(CaixaDeArquivo, on_delete=models.PROTECT, blank=True, null=True, 
+                                related_name="documentos", verbose_name="Caixa de Arquivo")
+    
+    def __str__(self):
+        return f"DOC{self.id}"
+    
+    class Meta:
+        verbose_name = "Documento"
+        verbose_name_plural = "Documentos"

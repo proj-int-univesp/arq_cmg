@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Detalhes do Documento{% endblock %}
+{% block content %}
+
+<div class="row">
+<div class="col-md-8 mx-auto mb-8">
+    <div class="card bg-secondary text-white">
+        <div class="card-header bg-dtl">
+            <h4><strong>Documento nº {{documento.id}}</strong></h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Série Documental:</strong> {{documento.serie_documental}}</p>
+            <p><strong>Código de Controle:</strong> {{documento.codigo_controle|default:"-"}}</p>
+            <p><strong>Código de Protocolo:</strong> {{documento.codigo_protocolo|default:"-"}}</p>
+            <p><strong>Data de Produção:</strong> {{documento.data_producao|date:"d/m/Y"}}</p>
+            <p><strong>Interessado:</strong> {{documento.interessado}}</p>
+            <p><strong>Assunto:</strong> {{documento.assunto}}</p>
+            <p><strong>Data de Encerramento:</strong> {{documento.data_encerramento|date:"d/m/Y"|default:"-"}}</p>
+            <p><strong>Quantidade de Volumes:</strong> {{documento.quantidade_volumes}}</p>
+            <p><strong>Caixa de Arquivo:</strong> {{documento.caixa|default:"-"}}</p>
+            <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-{% block title %}Exclusão de Interessado{% endblock %}
+{% block title %}Exclusão de Caixa de Arquivo{% endblock %}
 {% block content %}
 <div class="container mt-4">
-    <h1 class="mb-4 text-light bg-dark p-3 rounded text-center">Exclusão de Interessado</h1>
+    <h1 class="mb-4 text-light bg-dark p-3 rounded text-center">Exclusão de Caixa de Arquivo</h1>
     <div class="bg-blk p-4 rounded shadow">
         <form method="post" class="text-light">
             {% csrf_token %}
-            <p>Tem certeza que deseja excluir o interessado <strong>{{ interessado }}</strong>?</p>
+            <p>Tem certeza que deseja excluir a caixa de arquivo <strong>{{ caixadearquivo }}</strong>?</p>
             <div class="text-center mt-3">
                 <button type="submit" class="btn del-btn">Excluir</button>
-                <a href="{% url 'interessados' %}" class="btn btn-secondary">Cancelar</a>
+                <a href="{% url 'caixas' %}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

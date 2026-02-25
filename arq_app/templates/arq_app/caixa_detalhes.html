@@ -9,10 +9,61 @@
             <h4><strong>Caixa de Arquivo nº {{caixa.numero}}</strong></h4>
         </div>
         <div class="card-body">
+            <p><strong>Série documental:</strong> {{ serie_documental|default_if_none:"-" }}</p>
+            <p><strong>Data Inicial:</strong> {{ data_inicial|default_if_none:"-" }}</p>
+            <p><strong>Data Final:</strong> {{ data_final|default_if_none:"-" }}</p>
             <p><strong>Descrição:</strong> {{caixa.descricao}}</p>
             <p><strong>Observações:</strong> {{caixa.observacoes|default_if_none:"-"}}</p>
             <p><strong>Localização:</strong> {{caixa.cod_localizacao|default_if_none:"-"}}</p>
             <a href="{% url 'caixas' %}" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12 mx-auto mb-12">
+    <div class="card bg-secondary text-white">
+        <div class="card-header bg-dtl">
+            <h5><strong>Conteúdo da Caixa</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive mt-2">
+                <table class="table table-dark table-hover table-striped animate__animated animate__fadeIn">
+                    <thead class="thead-light">
+                        <tr class="text-center">
+                            <th>ID</th>
+                            <th>Código de Controle</th>
+                            <th>Data de Produção</th>
+                            <th>Interessado</th>
+                            <th>Assunto</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for documento in caixa.documentos.all %}
+                        <tr class="align-middle text-center">
+                            <td>{{ documento.id }}</td>
+                            <td>{{ documento.codigo_controle }}</td>
+                            <td>{{ documento.data_producao|date:"d/m/Y" }}</td>
+                            <td>{{ documento.interessado.nome }}</td>
+                            <td>{{ documento.assunto }}</td>
+                            <td>
+                                <a href="{% url 'detalhes_documento' documento.pk %}" class="btn btn-sm dtl-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-zoom-in" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/>
+                                        <path d="M10.344 11.742q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1 6.5 6.5 0 0 1-1.398 1.4z"/>
+                                        <path fill-rule="evenodd" d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5"/>
+                                    </svg> Detalhes</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-warning fw-bold">Não há documentos nesta caixa.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+        </table>
+    </div>
         </div>
     </div>
 </div>

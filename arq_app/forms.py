@@ -1,5 +1,5 @@
 from django import forms
-from .models import CaixaDeArquivo, Interessado
+from .models import CaixaDeArquivo, Documento, Interessado, SerieDocumentalPC
 import requests
 
 class CaixaDeArquivoForm(forms.ModelForm):
@@ -7,6 +7,20 @@ class CaixaDeArquivoForm(forms.ModelForm):
     class Meta:
         model = CaixaDeArquivo
         fields = ('descricao', 'observacoes', 'cod_localizacao')
+
+class DocumentoForm(forms.ModelForm):
+
+    class Meta:
+        model = Documento
+        fields = ('serie_documental', 'codigo_controle', 'codigo_protocolo', 
+                  'data_producao', 'interessado', 'assunto', 'data_encerramento',
+                  'quantidade_volumes', 'caixa')
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['serie_documental'].queryset = SerieDocumentalPC.objects.order_by('codigo')     
+        self.fields['interessado'].queryset = Interessado.objects.order_by('nome')     
+        self.fields['caixa'].queryset = CaixaDeArquivo.objects.order_by('numero')
 
 class InteressadoForm(forms.ModelForm):
 
@@ -31,7 +45,6 @@ class InteressadoForm(forms.ModelForm):
                 raise forms.ValidationError('Número do CPF deve conter 11 dígitos.')
             elif tipo_doc == 'J' and len(numero_doc) != 14:
                 raise forms.ValidationError('Número do CNPJ deve conter 14 dígitos.')
-            
 
             try:
                 if tipo_doc == 'F':
