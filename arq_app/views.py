@@ -11,6 +11,7 @@ class MenuView(LoginRequiredMixin, TemplateView):
 
 class CaixasdeArquivo(LoginRequiredMixin, ListView):
     model = CaixaDeArquivo
+    ordering = ['numero']
     template_name = 'arq_app/caixas.html'
     context_object_name = 'caixas'
 

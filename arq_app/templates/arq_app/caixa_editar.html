@@ -2,17 +2,23 @@
 {% load crispy_forms_tags %}
 {% block title %}Edição de Dados de Caixa de Arquivo{% endblock %}
 {% block content %}
-<div class="container mt-4">
-    <h1 class="mb-4 text-light bg-dark p-3 rounded text-center">Edição de Dados de Caixa de Arquivo</h1>
-    <div class="bg-blk p-4 rounded shadow">
-        <form method="post" class="text-light">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <div class="text-center mt-3">
-                <button type="submit" class="btn upd-btn">Alterar</button>
-                <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Cancelar</a>
+<div class="row">
+    <div class="col-md-8 mx-auto mb-8">
+        <div class="card bg-blk text-white">
+            <div class="card-header bg-upd">
+                <h1>Edição de Dados de Caixa de Arquivo</h1>
             </div>
-        </form>
+            <div class="card-body">
+                <form method="post" class="text-light">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn upd-btn">Alterar</button>
+                        <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -4,27 +4,29 @@
 
 <div class="row">
 <div class="col-md-8 mx-auto mb-8">
-    <div class="card bg-secondary text-white">
+    <div class="card bg-blk text-white">
         <div class="card-header bg-dtl">
-            <h4><strong>Caixa de Arquivo nº {{caixa.numero}}</strong></h4>
+            <h1>Detalhes da Caixa de Arquivo</h1>
         </div>
         <div class="card-body">
+            <p><strong>Número:</strong> {{caixa.numero}}</p>
             <p><strong>Série documental:</strong> {{ serie_documental|default_if_none:"-" }}</p>
             <p><strong>Data Inicial:</strong> {{ data_inicial|default_if_none:"-" }}</p>
             <p><strong>Data Final:</strong> {{ data_final|default_if_none:"-" }}</p>
             <p><strong>Descrição:</strong> {{caixa.descricao}}</p>
-            <p><strong>Observações:</strong> {{caixa.observacoes|default_if_none:"-"}}</p>
+            <p><strong>Observações:</strong> {{caixa.observacoes|default_if_none:"-"}}
             <p><strong>Localização:</strong> {{caixa.cod_localizacao|default_if_none:"-"}}</p>
             <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Voltar</a>
         </div>
     </div>
 </div>
 </div>
+<br>
 <div class="row">
 <div class="col-md-12 mx-auto mb-12">
-    <div class="card bg-secondary text-white">
+    <div class="card bg-blk text-white">
         <div class="card-header bg-dtl">
-            <h5><strong>Conteúdo da Caixa</strong></h5>
+            <h2>Conteúdo da Caixa</h2>
         </div>
         <div class="card-body">
             <div class="table-responsive mt-2">
