@@ -2,41 +2,47 @@
 {% load crispy_forms_tags %}
 {% block title %}Cadastro de Documento{% endblock %}
 {% block content %}
-<div class="container mt-4">
-    <h1 class="mb-4 text-light bg-dark p-3 rounded text-center">Cadastro de Documento</h1>
-    <div class="bg-blk p-4 rounded shadow">
-        <form method="post" class="text-light">
-            {% csrf_token %}
-            {% if form.non_field_errors %}
-                <div class="alert alert-danger">
-                    {{ form.non_field_errors }}
-                </div>
-            {% endif %}
-            <div class="mb-3">
-                <label for="id_serie_documental">Série Documental*</label><br>
-                {{ form.serie_documental }}
+<div class="row">
+    <div class="col-md-8 mx-auto mb-8">
+        <div class="card bg-blk text-white">
+            <div class="card-header bg-add">
+                <h1>Cadastro de Documento</h1>
             </div>
-            {{ form.codigo_controle|as_crispy_field }}
-            {{ form.codigo_protocolo|as_crispy_field }}
-            {{ form.data_producao|as_crispy_field }}
-            <div class="mb-3">
-                <label for="id_interessado">Interessado</label><br>
-                {{ form.interessado }}
-                <a href="{% url 'novo_interessado' %}" target="_blank" class="btn btn-sm btn-outline-success ms-2">Novo Interessado</a>
+            <div class="card-body">
+                <form method="post" class="text-light">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label for="id_serie_documental">Série Documental*</label><br>
+                        {{ form.serie_documental }}
+                    </div>
+                    {{ form.codigo_controle|as_crispy_field }}
+                    {{ form.codigo_protocolo|as_crispy_field }}
+                    {{ form.data_producao|as_crispy_field }}
+                    <div class="mb-3">
+                        <label for="id_interessado">Interessado</label><br>
+                        {{ form.interessado }}
+                        <a href="{% url 'novo_interessado' %}" target="_blank" class="btn btn-sm btn-outline-success ms-2">Novo Interessado</a>
+                    </div>
+                    {{ form.assunto|as_crispy_field }}
+                    {{ form.data_encerramento|as_crispy_field }}
+                    {{ form.quantidade_volumes|as_crispy_field }}
+                    <div class="mb-3">
+                        <label for="id_caixa">Caixa</label><br>
+                        {{ form.caixa }}
+                        <a href="{% url 'nova_caixa' %}" target="_blank" class="btn btn-sm btn-outline-success ms-2">Nova Caixa</a>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn add-btn">Cadastrar</button>
+                        <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
             </div>
-            {{ form.assunto|as_crispy_field }}
-            {{ form.data_encerramento|as_crispy_field }}
-            {{ form.quantidade_volumes|as_crispy_field }}
-            <div class="mb-3">
-                <label for="id_caixa">Caixa</label><br>
-                {{ form.caixa }}
-                <a href="{% url 'nova_caixa' %}" target="_blank" class="btn btn-sm btn-outline-success ms-2">Nova Caixa</a>
-            </div>
-            <div class="text-center mt-3">
-                <button type="submit" class="btn add-btn">Cadastrar</button>
-                <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Cancelar</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 {% endblock %}
