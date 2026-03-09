@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Tabela de Temporalidade{% endblock %}
+{% block content %}
+<div class="row">
+<div class="col-md-12 mx-auto mb-12">
+    <div class="card bg-blk text-white">
+        <div class="card-header bg-warning txt-blk">
+            <h1>Tabela de Temporalidade</h1>
+        </div>
+        <div class="card-body">
+            {% for funcao in funcoes %}
+                <h2>{{funcao}}</h2>
+                {% for subfuncao in funcao.subfuncoes.all %}
+                    <h3>{{subfuncao}}</h3>
+                    {% for atividade in subfuncao.atividades.all %}
+                        <h4>{{atividade}}</h4>
+                            <div class="table-responsive mt-2">
+                                <table class="table table-dark table-hover table-striped animate__animated animate__fadeIn">
+                                    <thead class="thead-light">
+                                        <tr class="text-center" style="font-size: small;">
+                                            <th rowspan="2" style="width: 5%;">Código</th>
+                                            <th rowspan="2" style="width: 25%;">Nome</th>
+                                            <th colspan="2" style="width: 15%;">Prazo de Guarda</th>
+                                            <th rowspan="2" style="width: 5%;">Destinação</th>
+                                            <th rowspan="2" style="width: 25%;">Observações</th>
+                                            <th rowspan="2" style="width: 25%;">Legislação / Norma</th>
+                                        </tr>
+                                        <tr class="text-center" style="font-size: small;">
+                                            <th>Corrente</th>
+                                            <th>Central</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for serie in atividade.series_documentais.all %}
+                                        <tr class="align-middle text-center" style="font-size: small;">
+                                            <td>{{ serie.codigo }}</td>
+                                            <td style="text-align: left;">{{ serie.nome }}</td>
+                                            <td>{{ serie.prazo_corrente|default:serie.get_tipo_prazo_corrente_display }}</td>
+                                            <td>{{ serie.prazo_central|default:"-" }}</td>
+                                            <td>{{ serie.get_destinacao_display }}</td>
+                                            <td style="text-align: justify;">{{ serie.observacoes }}</td>
+                                            <td style="text-align: justify;">{{ serie.legislacao_norma }}</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr><td colspan="4">Não há séries documentais cadastradas para esta atividade.</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                    {% empty %}
+                        <p>Não há atividades cadastradas para esta subfunção.</p>
+                    {% endfor %}
+                {% empty %}
+                    <p>Não há subfunções cadastradas.</p>
+                {% endfor %}
+            {% empty %}
+                <p>Não há funções cadastradas.</p>
+            {% endfor %}       
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

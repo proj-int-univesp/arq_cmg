@@ -6,14 +6,14 @@ from django.utils import timezone
 from django.db.models import Count, Min, Q, F
 
 from .forms import CaixaDeArquivoForm, DocumentoForm, InteressadoForm
-from .models import CaixaDeArquivo, Documento, Interessado, SerieDocumentalPC
+from .models import CaixaDeArquivo, Documento, FuncaoPC, Interessado, SerieDocumentalPC
 
 class MenuView(LoginRequiredMixin, TemplateView):
     template_name = 'arq_app/menu.html'
 
 class CaixasdeArquivo(LoginRequiredMixin, ListView):
     model = CaixaDeArquivo
-    ordering = ['numero']
+    ordering = ['-numero']
     template_name = 'arq_app/caixas.html'
     context_object_name = 'caixas'
 
@@ -78,6 +78,7 @@ class Documentos(LoginRequiredMixin, ListView):
     model = Documento
     template_name = 'arq_app/documentos.html'
     context_object_name = 'documentos'
+    ordering = ['-id']
 
 class DocumentoDetalhes(LoginRequiredMixin, TemplateView):
     template_name = 'arq_app/documento_detalhes.html'
@@ -123,6 +124,7 @@ class Interessados(LoginRequiredMixin, ListView):
     model = Interessado
     template_name = 'arq_app/interessados.html'
     context_object_name = 'interessados'
+    ordering = ['nome']
 
 class InteressadoNovo(LoginRequiredMixin, CreateView):
     form_class = InteressadoForm
@@ -200,3 +202,15 @@ class CaixasAptasEliminacaoListView(LoginRequiredMixin, ListView):
             documentos__serie_documental=serie,
             documentos__data_producao__lte=data_limite
         ).distinct()
+    
+class TabelaTemporalidadeListView1(LoginRequiredMixin, ListView):
+    model = SerieDocumentalPC
+    template_name = 'arq_app/tabela_temporalidade.html'
+    context_object_name = 'series_documentais'
+    ordering = ['codigo']
+
+class TabelaTemporalidadeListView(LoginRequiredMixin, ListView):
+    model = FuncaoPC
+    template_name = 'arq_app/tabela_temporalidade.html'
+    context_object_name = 'funcoes'
+    ordering = ['codigo']

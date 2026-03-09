@@ -70,6 +70,17 @@
             text-align: center;
             font-weight: bold;
         }
+
+        th{
+            vertical-align: middle !important; 
+            text-align: center; 
+            height: 10px;
+        }
+
+        td{
+            vertical-align: middle !important; 
+        }
+
     </style>
 
 </head>
@@ -99,45 +110,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'regua-eliminacao' %}">Régua de Eliminação</a>
                     </li>
-                    
-                    {% if user.funcionario.analisa_ped_info %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'ped_infos_analise' %}">Analisar Pedidos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'ped_infos_geral' %}">Consulta Geral</a>
-                        </li>
-                    {% endif %}
 
-                    {% if user.funcionario %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'ped_infos_fornecimento' %}">Fornecer Informações</a>
-                        </li>
-                    {% endif %}
-
-                    {% if user.funcionario.emite_parecer %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'ped_infos_parecer' %}">Emitir Pareceres</a>
-                        </li>
-                    {% endif %}
-
-                    {% if user.funcionario.responde_ped_info %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'ped_infos_resposta' %}">Responder Pedidos</a>
-                        </li>
-                    {% endif %}
-                    
-                    {% if user.funcionario.responde_recurso_1 %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'ped_infos_resp_rec_1' %}">Responder Recursos em 1ª Instância</a>
-                        </li>
-                    {% endif %}
-
-                    {% if user.funcionario.responde_recurso_2 %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'ped_infos_resp_rec_2' %}">Responder Recursos em 2ª Instância</a>
-                        </li>
-                    {% endif %}                  
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'tabela-temporalidade' %}">Tabela de Temporalidade</a>
+                    </li>
 
                     {% if user.is_superuser %}
                         <li class="nav-item">
