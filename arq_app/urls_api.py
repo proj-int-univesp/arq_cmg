@@ -3,5 +3,5 @@ from .views_api import CaixasPorSerieDocumentalAPIView, SerieDocumentalPCListAPI
 
 urlpatterns = [
     path('api/temporalidade/', SerieDocumentalPCListAPIView.as_view(), name='api-temporalidade'),
-    path('api/caixas/serie/<str:codigo>/', CaixasPorSerieDocumentalAPIView.as_view(), name='api-caixas-por-serie'),
+    path('api/caixas/serie/<str:codigo>/', CaixasPorSerieDocumentalAPIView.as_view(), name='api-caixas-por-serie')
 ]

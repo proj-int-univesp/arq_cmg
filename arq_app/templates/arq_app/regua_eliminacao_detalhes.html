@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Detalhes da Régua de Eliminação{% endblock %}
+{% block content %}
+
+<div class="row">
+<div class="col-md-12 mx-auto mb-12">
+    <div class="card bg-blk text-white">
+        <div class="card-header bg-dtl txt-blk">
+            <h1>Régua de Eliminação</h1>
+            <h2 style="text-align: center;">{{caixas_aptas.0.documentos.first.serie_documental}}</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive mt-2">
+                <table class="table table-dark table-hover table-striped animate__animated animate__fadeIn">
+                    <thead class="thead-light">
+                        <tr class="text-center">
+                            <th>Número</th>
+                            <th>Data Inicial</th>
+                            <th>Data Final</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for caixa in caixas_aptas %}
+                        <tr class="align-middle text-center">
+                            <td>{{ caixa.numero }}</td>
+                            <td>{{ caixa.documentos.first.data_producao|date:"d/m/Y" }}</td>
+                            <td>{{ caixa.documentos.last.data_producao|date:"d/m/Y" }}</td>
+                            <td>{{ caixa.descricao }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4">Nenhuma caixa apta encontrada.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+             <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
