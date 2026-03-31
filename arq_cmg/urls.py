@@ -38,9 +38,10 @@ urlpatterns = [
     path('arq-app/interessado/novo', views.InteressadoNovo.as_view(), name='novo_interessado'),
     path('arq-app/interessado/editar/<int:pk>/', views.InteressadoEditar.as_view(), name='editar_interessado'),
     path('arq-app/interessado/excluir/<int:pk>/', views.InteressadoExcluir.as_view(), name='excluir_interessado'),
-    path('regua-eliminacao/', views.SeriesDocumentaisEliminarListView.as_view(), name='regua-eliminacao'),
-    path('regua-eliminacao/<str:serie_codigo>/', views.CaixasAptasEliminacaoListView.as_view(), name='detalhes-regua-eliminacao'),
-    path('tabela-temporalidade/', views.TabelaTemporalidadeListView.as_view(), name='tabela-temporalidade'),
+    path('arq-app/plano-classificacao/', views.PlanoClassificacaoListView.as_view(), name='plano-classificacao'),
+    path('arq-app/regua-eliminacao/', views.SeriesDocumentaisEliminarListView.as_view(), name='regua-eliminacao'),
+    path('arq-app/regua-eliminacao/<str:serie_codigo>/', views.CaixasAptasEliminacaoListView.as_view(), name='detalhes-regua-eliminacao'),
+    path('arq-app/tabela-temporalidade/', views.TabelaTemporalidadeListView.as_view(), name='tabela-temporalidade'),
     path('arq-app/', include('arq_app.urls_api')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls)

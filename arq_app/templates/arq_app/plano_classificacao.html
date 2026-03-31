@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Plano de Classificação{% endblock %}
+{% block content %}
+<div class="row">
+<div class="col-md-12 mx-auto mb-12">
+    <div class="card bg-blk text-white">
+        <div class="card-header bg-warning txt-blk">
+            <h1>Plano de Classificação</h1>
+        </div>
+        <div class="card-body">
+            <table style="width: 100%;">
+            {% for funcao in funcoes %}
+            <tr style="border-top: 1px solid #fff;">
+                <td style="font-weight: bold;">Função:</td>
+                <td style="font-weight: bold;">{{funcao.codigo}}</td>
+                <td style="font-weight: bold;">{{funcao.nome}}</td>
+            </tr>
+                {% for subfuncao in funcao.subfuncoes.all %}
+                <tr style="border-top: 1px solid #fff;">
+                    <td style="font-weight: bold;">Subfunção:</td>
+                    <td style="font-weight: bold;">{{subfuncao.codigo}}</td>
+                    <td>{{subfuncao.nome}}</td>
+                </tr>
+                    {% for atividade in subfuncao.atividades.all %}
+                    <tr style="border-top: 1px solid #fff; border-bottom: 1px solid #fff;">
+                        <td style="font-weight: bold;">Atividade:</td>
+                        <td>{{atividade.codigo}}</td>
+                        <td>{{atividade.nome}}</td>
+                    </tr>                        
+                        {% for serie in atividade.series_documentais.all %}
+                        <tr>
+                            {% if forloop.first %}
+                            <td>Documentos:</td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
+                            <td>{{serie.codigo}}</td>
+                            <td>{{serie.nome}}</td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+            </table>       
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

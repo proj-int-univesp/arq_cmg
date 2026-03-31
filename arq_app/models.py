@@ -107,7 +107,9 @@ class CaixaDeArquivo(models.Model):
     descricao = models.CharField(max_length=255, verbose_name="Descrição")
     observacoes = models.TextField(blank=True, verbose_name="Observações")
     cod_localizacao = models.CharField(max_length=20, verbose_name="Código de Localização", blank=True, null=True)
-    
+    termoEliminacao = models.ForeignKey('TermoEliminacaoDocumentos', on_delete=models.SET_NULL, blank=True, null=True,
+                                        related_name="caixas_eliminadas", verbose_name="Termo de Eliminação")
+
     def save(self, *args, **kwargs):
         
         if self.numero is None:                        
@@ -157,3 +159,16 @@ class Documento(models.Model):
     class Meta:
         verbose_name = "Documento"
         verbose_name_plural = "Documentos"
+
+class TermoEliminacaoDocumentos(models.Model):
+    numeroTermo = models.CharField(max_length=20, unique=True, verbose_name="Número do Termo")
+    dataTermo = models.DateField(verbose_name="Data do Termo")
+    numeroEdital = models.CharField(max_length=20, unique=True, verbose_name="Número do Edital")
+    observacoes = models.TextField(blank=True, verbose_name="Observações")
+
+    def __str__(self):
+        return f"Termo de Eliminação nº {self.numeroTermo}"
+    
+    class Meta:
+        verbose_name = "Termo de Eliminação de Documentos"
+        verbose_name_plural = "Termos de Eliminação de Documentos"

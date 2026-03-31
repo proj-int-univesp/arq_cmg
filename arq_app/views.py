@@ -11,6 +11,25 @@ from .models import CaixaDeArquivo, Documento, FuncaoPC, Interessado, SerieDocum
 class MenuView(LoginRequiredMixin, TemplateView):
     template_name = 'arq_app/menu.html'
 
+class CaixasAptasEliminacaoListView(LoginRequiredMixin, ListView):
+    model = CaixaDeArquivo
+    template_name = 'arq_app/regua_eliminacao_detalhes.html'
+    context_object_name = 'caixas_aptas'
+
+    def get_queryset(self):
+        serie_codigo = self.kwargs.get('serie_codigo')
+        hoje = timezone.now().date()
+        try:
+            serie = SerieDocumentalPC.objects.get(codigo=serie_codigo)
+        except SerieDocumentalPC.DoesNotExist:
+            return CaixaDeArquivo.objects.none()
+        data_limite = hoje.replace(year=hoje.year - serie.prazo_central)
+        print(f"Data limite para eliminação: {data_limite}")
+        return CaixaDeArquivo.objects.filter(
+            documentos__serie_documental=serie,
+            documentos__data_producao__lte=data_limite
+        ).distinct()
+
 class CaixasdeArquivo(LoginRequiredMixin, ListView):
     model = CaixaDeArquivo
     ordering = ['-numero']
@@ -157,6 +176,12 @@ class InteressadoExcluir(LoginRequiredMixin, DeleteView):
         messages.success(self.request, f"Interessado {self.object} excluído com sucesso.")
         return super(InteressadoExcluir,self).form_valid(form)
 
+class PlanoClassificacaoListView(LoginRequiredMixin, ListView):
+    model = FuncaoPC
+    template_name = 'arq_app/plano_classificacao.html'
+    context_object_name = 'funcoes'
+    ordering = ['codigo']
+
 class SeriesDocumentaisEliminarListView(LoginRequiredMixin, ListView):
     model = SerieDocumentalPC
     template_name = 'arq_app/regua_eliminacao.html'
@@ -183,31 +208,6 @@ class SeriesDocumentaisEliminarListView(LoginRequiredMixin, ListView):
                     resultado.append(serie)
         resultado.sort(key=lambda s: s.caixas_relacionadas, reverse=True)
         return resultado
-
-class CaixasAptasEliminacaoListView(LoginRequiredMixin, ListView):
-    model = CaixaDeArquivo
-    template_name = 'arq_app/regua_eliminacao_detalhes.html'
-    context_object_name = 'caixas_aptas'
-
-    def get_queryset(self):
-        serie_codigo = self.kwargs.get('serie_codigo')
-        hoje = timezone.now().date()
-        try:
-            serie = SerieDocumentalPC.objects.get(codigo=serie_codigo)
-        except SerieDocumentalPC.DoesNotExist:
-            return CaixaDeArquivo.objects.none()
-        data_limite = hoje.replace(year=hoje.year - serie.prazo_central)
-        print(f"Data limite para eliminação: {data_limite}")
-        return CaixaDeArquivo.objects.filter(
-            documentos__serie_documental=serie,
-            documentos__data_producao__lte=data_limite
-        ).distinct()
-    
-class TabelaTemporalidadeListView1(LoginRequiredMixin, ListView):
-    model = SerieDocumentalPC
-    template_name = 'arq_app/tabela_temporalidade.html'
-    context_object_name = 'series_documentais'
-    ordering = ['codigo']
 
 class TabelaTemporalidadeListView(LoginRequiredMixin, ListView):
     model = FuncaoPC

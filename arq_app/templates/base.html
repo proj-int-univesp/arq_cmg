@@ -10,6 +10,21 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
     <style>
+
+      /* Dropdown escuro para Bootstrap 4 */
+        .dropdown-menu.dropdown-menu-dark {
+            background-color: #343a40;
+            color: #fff;
+        }
+        .dropdown-menu.dropdown-menu-dark .dropdown-item {
+            color: #fff;
+        }
+        .dropdown-menu.dropdown-menu-dark .dropdown-item:hover,
+        .dropdown-menu.dropdown-menu-dark .dropdown-item:focus {
+            background-color: #23272b;
+            color: #fff;
+        }
+
         .bg-blk{
             background-color: #000000;
             color: white;
@@ -95,24 +110,29 @@
 
                 <ul class="navbar-nav">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'caixas' %}">Caixas de Arquivo</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="m-cadastrosDropdown" role="button" data-toggle="dropdown" aria-expanded="false">Cadastros</a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="m-cadastrosDropdown">
+                            <li><a class="dropdown-item" href="{% url 'caixas' %}">Caixas de Arquivo</a></li>
+                            <li><a class="dropdown-item" href="{% url 'documentos' %}">Documentos</a></li>
+                            <li> <a class="dropdown-item" href="{% url 'interessados' %}">Interessados</a></li>
+                        </ul>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'documentos' %}">Documentos</a>
-                    </li>
- 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'interessados' %}">Interessados</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'regua-eliminacao' %}">Régua de Eliminação</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="m-eliminacaoDropdown" role="button" data-toggle="dropdown" aria-expanded="false">Eliminação</a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="m-eliminacaoDropdown">
+                            <li><a class="dropdown-item" href="{% url 'regua-eliminacao' %}">Régua</a></li>
+                            <li> <a class="dropdown-item" href="{% url 'regua-eliminacao' %}">Termos</a></li>
+                        </ul>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tabela-temporalidade' %}">Tabela de Temporalidade</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="m-instrumentosGestaoDropdown" role="button" data-toggle="dropdown" aria-expanded="false">Instrumentos de Gestão</a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="m-instrumentosGestaoDropdown">
+                            <li><a class="dropdown-item" href="{% url 'plano-classificacao' %}">Plano de Classificação</a>
+                            <li> <a class="dropdown-item" href="{% url 'tabela-temporalidade' %}">Tabela de Temporalidade</a>
+                        </ul>
                     </li>
 
                     {% if user.is_superuser %}
