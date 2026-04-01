@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Cadastro de Termos de Eliminação{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto mb-8">
+        <div class="card bg-blk text-white">
+            <div class="card-header bg-add">
+                <h1>Cadastro de Termos de Eliminação</h1>
+            </div>
+            <div class="card-body">
+                <form method="post" class="text-light">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn add-btn">Cadastrar</button>
+                        <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

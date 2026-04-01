@@ -9,11 +9,11 @@
         </div>
         <div class="card-body">
             {% for funcao in funcoes %}
-                <h2>{{funcao}}</h2>
+                <p style="font-weight: bold;">{{funcao|upper}}</p>
                 {% for subfuncao in funcao.subfuncoes.all %}
-                    <h3>{{subfuncao}}</h3>
+                    <p>{{subfuncao|upper}}</p>
                     {% for atividade in subfuncao.atividades.all %}
-                        <h4>{{atividade}}</h4>
+                        <p>{{atividade}}</p>
                             <div class="table-responsive mt-2">
                                 <table class="table table-dark table-hover table-striped animate__animated animate__fadeIn">
                                     <thead class="thead-light">

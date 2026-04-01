@@ -5,8 +5,8 @@ from django.views.generic import CreateView, ListView, TemplateView, UpdateView,
 from django.utils import timezone
 from django.db.models import Count, Min, Q, F
 
-from .forms import CaixaDeArquivoForm, DocumentoForm, InteressadoForm
-from .models import CaixaDeArquivo, Documento, FuncaoPC, Interessado, SerieDocumentalPC
+from .forms import CaixaDeArquivoForm, DocumentoForm, InteressadoForm, TermoEliminacaoForm
+from .models import CaixaDeArquivo, Documento, FuncaoPC, Interessado, SerieDocumentalPC, TermoEliminacaoDocumentos
 
 class MenuView(LoginRequiredMixin, TemplateView):
     template_name = 'arq_app/menu.html'
@@ -214,3 +214,52 @@ class TabelaTemporalidadeListView(LoginRequiredMixin, ListView):
     template_name = 'arq_app/tabela_temporalidade.html'
     context_object_name = 'funcoes'
     ordering = ['codigo']
+
+class TermoEliminacaoDetalhes(LoginRequiredMixin, TemplateView):
+    
+    template_name = 'arq_app/termo_detalhes.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        termo_id = self.kwargs.get('pk')
+        context['termo'] = TermoEliminacaoDocumentos.objects.get(pk=termo_id)
+        
+        return context
+    
+class TermoEliminacaoEditar(LoginRequiredMixin, UpdateView):
+    model = TermoEliminacaoDocumentos
+    form_class = TermoEliminacaoForm
+    template_name = 'arq_app/termo_editar.html'
+    success_url = '/arq-app/termos/'
+
+    def form_valid(self, form):
+
+        messages.success(self.request, f"Termo de Eliminação nº {self.object} editado com sucesso.")
+        return super(TermoEliminacaoEditar,self).form_valid(form)
+
+class TermoEliminacaoExcluir(LoginRequiredMixin, DeleteView):
+    context_object_name = 'termo'
+    model = TermoEliminacaoDocumentos
+    template_name = 'arq_app/termo_excluir.html'
+    success_url = '/arq-app/termos/'
+    
+    def form_valid(self, form):
+
+        messages.success(self.request, f"Termo de Eliminação nº {self.object} excluído com sucesso.")
+        return super(TermoEliminacaoExcluir,self).form_valid(form)
+
+class TermoEliminacaoNovo(LoginRequiredMixin, CreateView):
+    form_class = TermoEliminacaoForm
+    template_name = 'arq_app/termo_novo.html'
+    success_url = '/arq-app/termos/'
+
+    def form_valid(self, form):
+
+        messages.success(self.request, f"Termo de Eliminação nº {form.instance} cadastrado com sucesso.")
+        return super(TermoEliminacaoNovo,self).form_valid(form)
+
+class TermosEliminacao(LoginRequiredMixin, ListView):
+    model = TermoEliminacaoDocumentos
+    template_name = 'arq_app/termos.html'
+    context_object_name = 'termos'
+    ordering = ['-dataTermo']

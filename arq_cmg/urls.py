@@ -42,6 +42,11 @@ urlpatterns = [
     path('arq-app/regua-eliminacao/', views.SeriesDocumentaisEliminarListView.as_view(), name='regua-eliminacao'),
     path('arq-app/regua-eliminacao/<str:serie_codigo>/', views.CaixasAptasEliminacaoListView.as_view(), name='detalhes-regua-eliminacao'),
     path('arq-app/tabela-temporalidade/', views.TabelaTemporalidadeListView.as_view(), name='tabela-temporalidade'),
+    path('arq-app/termos/', views.TermosEliminacao.as_view(), name='termos'),
+    path('arq-app/termo/detalhes/<int:pk>/', views.TermoEliminacaoDetalhes.as_view(), name='detalhes_termo'),
+    path('arq-app/termo/editar/<int:pk>/', views.TermoEliminacaoEditar.as_view(), name='editar_termo'),
+    path('arq-app/termo/excluir/<int:pk>/', views.TermoEliminacaoExcluir.as_view(), name='excluir_termo'),
+    path('arq-app/termo/novo', views.TermoEliminacaoNovo.as_view(), name='novo_termo'),
     path('arq-app/', include('arq_app.urls_api')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls)

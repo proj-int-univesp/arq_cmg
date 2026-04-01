@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Exclusão de Termo de Eliminação{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto mb-8">
+        <div class="card bg-blk text-white">
+            <div class="card-header bg-del">
+                <h1>Exclusão de Termo de Eliminação</h1>
+            </div>
+            <div class="card-body">
+                <form method="post" class="text-light">
+                    {% csrf_token %}
+                    <p>Tem certeza que deseja excluir o termo de eliminação <strong>{{ termo }}</strong>?</p>
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn del-btn">Excluir</button>
+                        <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

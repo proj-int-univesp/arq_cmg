@@ -1,5 +1,6 @@
 from django import forms
-from .models import CaixaDeArquivo, Documento, Interessado, SerieDocumentalPC
+from django.forms import DateInput
+from .models import CaixaDeArquivo, Documento, Interessado, SerieDocumentalPC, TermoEliminacaoDocumentos
 import requests
 
 class CaixaDeArquivoForm(forms.ModelForm):
@@ -15,11 +16,17 @@ class DocumentoForm(forms.ModelForm):
         fields = ('serie_documental', 'codigo_controle', 'codigo_protocolo', 
                   'data_producao', 'interessado', 'assunto', 'data_encerramento',
                   'quantidade_volumes', 'caixa')
+        widgets = {
+            'data_producao': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'data_encerramento': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+        }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['serie_documental'].queryset = SerieDocumentalPC.objects.order_by('codigo')     
+        self.fields['data_producao'].input_formats = ['%Y-%m-%d']
         self.fields['interessado'].queryset = Interessado.objects.order_by('nome')     
+        self.fields['data_encerramento'].input_formats = ['%Y-%m-%d']
         self.fields['caixa'].queryset = CaixaDeArquivo.objects.order_by('numero')
 
 class InteressadoForm(forms.ModelForm):
@@ -62,4 +69,17 @@ class InteressadoForm(forms.ModelForm):
         else:
             numero_doc = None  
 
-        return numero_doc 
+        return numero_doc
+    
+class TermoEliminacaoForm(forms.ModelForm):
+
+    class Meta:
+        model = TermoEliminacaoDocumentos
+        fields = ('numeroTermo', 'dataTermo', 'numeroEdital', 'observacoes')
+        widgets = {
+            'dataTermo': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['dataTermo'].input_formats = ['%Y-%m-%d']

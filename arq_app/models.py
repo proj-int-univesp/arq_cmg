@@ -167,7 +167,7 @@ class TermoEliminacaoDocumentos(models.Model):
     observacoes = models.TextField(blank=True, verbose_name="Observações")
 
     def __str__(self):
-        return f"Termo de Eliminação nº {self.numeroTermo}"
+        return f"{self.numeroTermo} ({self.dataTermo.strftime('%d/%m/%Y')})"
     
     class Meta:
         verbose_name = "Termo de Eliminação de Documentos"
