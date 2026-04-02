@@ -48,6 +48,7 @@ urlpatterns = [
     path('arq-app/termo/excluir/<int:pk>/', views.TermoEliminacaoExcluir.as_view(), name='excluir_termo'),
     path('arq-app/termo/novo', views.TermoEliminacaoNovo.as_view(), name='novo_termo'),
     path('arq-app/', include('arq_app.urls_api')),
+    path('arq-app/', include('arq_app.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls)
 

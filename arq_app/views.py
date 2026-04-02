@@ -1,12 +1,32 @@
-from django.shortcuts import render
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, ListView, TemplateView, UpdateView, DeleteView
-from django.utils import timezone
 from django.db.models import Count, Min, Q, F
+from django.shortcuts import redirect, get_object_or_404
+from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_POST
+from django.views.generic import CreateView, ListView, TemplateView, UpdateView, DeleteView
 
 from .forms import CaixaDeArquivoForm, DocumentoForm, InteressadoForm, TermoEliminacaoForm
 from .models import CaixaDeArquivo, Documento, FuncaoPC, Interessado, SerieDocumentalPC, TermoEliminacaoDocumentos
+
+# View para associar caixa a termo de eliminação
+@login_required
+@require_POST
+def associar_termo_caixa(request):
+    caixa_id = request.POST.get('caixa_id')
+    termo_id = request.POST.get('termo_id')
+    if caixa_id and termo_id:
+        caixa = get_object_or_404(CaixaDeArquivo, pk=caixa_id)
+        termo = get_object_or_404(TermoEliminacaoDocumentos, pk=termo_id)
+        caixa.termoEliminacao = termo
+        caixa.save()
+        messages.success(request, f'Caixa de arquivo {caixa} incluída no Termo de Eliminação nº {termo}.')
+    else:
+        messages.error(request, 'Selecione um termo para associar.')
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 class MenuView(LoginRequiredMixin, TemplateView):
     template_name = 'arq_app/menu.html'
@@ -16,6 +36,7 @@ class CaixasAptasEliminacaoListView(LoginRequiredMixin, ListView):
     template_name = 'arq_app/regua_eliminacao_detalhes.html'
     context_object_name = 'caixas_aptas'
 
+
     def get_queryset(self):
         serie_codigo = self.kwargs.get('serie_codigo')
         hoje = timezone.now().date()
@@ -24,17 +45,24 @@ class CaixasAptasEliminacaoListView(LoginRequiredMixin, ListView):
         except SerieDocumentalPC.DoesNotExist:
             return CaixaDeArquivo.objects.none()
         data_limite = hoje.replace(year=hoje.year - serie.prazo_central)
-        print(f"Data limite para eliminação: {data_limite}")
         return CaixaDeArquivo.objects.filter(
+            termoEliminacao=None,
             documentos__serie_documental=serie,
             documentos__data_producao__lte=data_limite
         ).distinct()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['termos_eliminacao'] = TermoEliminacaoDocumentos.objects.all()
+        return context
+
 class CaixasdeArquivo(LoginRequiredMixin, ListView):
     model = CaixaDeArquivo
-    ordering = ['-numero']
     template_name = 'arq_app/caixas.html'
     context_object_name = 'caixas'
+
+    def get_queryset(self):
+        return CaixaDeArquivo.objects.filter(termoEliminacao=None).order_by('-numero')
 
 class CaixaDetalhes(LoginRequiredMixin, TemplateView):
     template_name = 'arq_app/caixa_detalhes.html'
@@ -97,7 +125,9 @@ class Documentos(LoginRequiredMixin, ListView):
     model = Documento
     template_name = 'arq_app/documentos.html'
     context_object_name = 'documentos'
-    ordering = ['-id']
+
+    def get_queryset(self):
+        return Documento.objects.filter(caixa__termoEliminacao=None).order_by('-id')
 
 class DocumentoDetalhes(LoginRequiredMixin, TemplateView):
     template_name = 'arq_app/documento_detalhes.html'
@@ -200,6 +230,7 @@ class SeriesDocumentaisEliminarListView(LoginRequiredMixin, ListView):
             if serie.min_data_producao:
                 data_limite = hoje.replace(year=hoje.year - serie.prazo_central)
                 caixas_relacionadas = CaixaDeArquivo.objects.filter(
+                    termoEliminacao=None,
                     documentos__serie_documental=serie,
                     documentos__data_producao__lte=data_limite
                 ).distinct().count()
