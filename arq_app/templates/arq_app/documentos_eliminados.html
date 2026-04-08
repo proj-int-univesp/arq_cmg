@@ -1,40 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Detalhes da Caixa de Arquivo{% endblock %}
+{% block title %}Documentos Eliminados{% endblock %}
 {% block content %}
-
-<div class="row">
-<div class="col-md-8 mx-auto mb-8">
-    <div class="card bg-blk text-white">
-        <div class="card-header bg-dtl">
-            <h1>Detalhes da Caixa de Arquivo</h1>
-        </div>
-        <div class="card-body">
-            <p><strong>Número:</strong> {{caixa.numero}}</p>
-            <p><strong>Série documental:</strong> {{ serie_documental|default_if_none:"-" }}</p>
-            <p><strong>Data Inicial:</strong> {{ data_inicial|default_if_none:"-" }}</p>
-            <p><strong>Data Final:</strong> {{ data_final|default_if_none:"-" }}</p>
-            <p><strong>Descrição:</strong> {{caixa.descricao}}</p>
-            <p><strong>Observações:</strong> {{caixa.observacoes|default_if_none:"-"}}
-            {% if caixa.termoEliminacao %}
-            <p><strong>Eliminação:</strong></p>
-            <ul>
-                <li><strong>Data:</strong> {{ caixa.termoEliminacao.dataTermo|date:"d/m/Y" }}</li>
-                <li><strong>Termo nº:</strong> <a href="{% url 'detalhes_termo' caixa.termoEliminacao.pk %}">{{ caixa.termoEliminacao.numeroTermo }}</a></li>
-            </ul>
-            {% else %}
-            <p><strong>Localização:</strong> {{caixa.cod_localizacao|default_if_none:"-"}}</p>
-            {% endif %}
-            <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Voltar</a>
-        </div>
-    </div>
-</div>
-</div>
-<br>
 <div class="row">
 <div class="col-md-12 mx-auto mb-12">
     <div class="card bg-blk text-white">
-        <div class="card-header bg-dtl">
-            <h2>Conteúdo da Caixa</h2>
+        <div class="card-header bg-warning txt-blk">
+            <h1>Documentos Eliminados</h1>
         </div>
         <div class="card-body">
             <div class="table-responsive mt-2">
@@ -42,21 +13,23 @@
                     <thead class="thead-light">
                         <tr class="text-center">
                             <th>ID</th>
+                            <th>Classe</th>
                             <th>Código de Controle</th>
                             <th>Data de Produção</th>
                             <th>Interessado</th>
-                            <th>Assunto</th>
+                            <th>Data de Eliminação</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for documento in caixa.documentos.all %}
+                        {% for documento in documentos %}
                         <tr class="align-middle text-center">
                             <td>{{ documento.id }}</td>
+                            <td>{{ documento.serie_documental.codigo }}</td>
                             <td>{{ documento.codigo_controle }}</td>
                             <td>{{ documento.data_producao|date:"d/m/Y" }}</td>
                             <td>{{ documento.interessado.nome }}</td>
-                            <td>{{ documento.assunto }}</td>
+                            <td>{{ documento.caixa.termoEliminacao.dataTermo|date:"d/m/Y"|default:"N/D" }}</td>
                             <td>
                                 <a href="{% url 'detalhes_documento' documento.pk %}" class="btn btn-sm dtl-btn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-zoom-in" viewBox="0 0 16 16">
@@ -68,7 +41,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="6" class="text-center text-warning fw-bold">Não há documentos nesta caixa.</td>
+                            <td colspan="7" class="text-center text-warning fw-bold">Não há registro de documentos eliminados.</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -78,5 +51,4 @@
     </div>
 </div>
 </div>
-
 {% endblock %}

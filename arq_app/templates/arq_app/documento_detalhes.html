@@ -18,6 +18,13 @@
             <p><strong>Data de Encerramento:</strong> {{documento.data_encerramento|date:"d/m/Y"|default:"-"}}</p>
             <p><strong>Quantidade de Volumes:</strong> {{documento.quantidade_volumes}}</p>
             <p><strong>Caixa de Arquivo:</strong> {{documento.caixa|default:"-"}}</p>
+            {% if documento.caixa and documento.caixa.termoEliminacao %}
+            <p><strong>Eliminação:</strong></p>
+            <ul>
+                <li><strong>Data:</strong> {{ documento.caixa.termoEliminacao.dataTermo|date:"d/m/Y" }}</li>
+                <li><strong>Termo nº:</strong> <a href="{% url 'detalhes_termo' documento.caixa.termoEliminacao.pk %}">{{ documento.caixa.termoEliminacao.numeroTermo }}</a></li>
+            </ul>
+            {% endif %}
             <a href="{{ request.META.HTTP_REFERER|default:'#' }}" class="btn btn-secondary">Voltar</a>
         </div>
     </div>

@@ -25,11 +25,13 @@ urlpatterns = [
     path('', views.MenuView.as_view(), name='menu'),
 
     path('arq-app/caixas/', views.CaixasdeArquivo.as_view(), name='caixas'),
+    path('arq-app/caixas-eliminadas/', views.CaixasEliminadas.as_view(), name='caixas-eliminadas'),
     path('arq-app/caixa/detalhes/<int:pk>/', views.CaixaDetalhes.as_view(), name='detalhes_caixa'),
     path('arq-app/caixa/nova/', views.CaixaNova.as_view(), name='nova_caixa'),
     path('arq-app/caixa/editar/<int:pk>/', views.CaixaEditar.as_view(), name='editar_caixa'),
     path('arq-app/caixa/excluir/<int:pk>/', views.CaixaExcluir.as_view(), name='excluir_caixa'),
     path('arq-app/documentos/', views.Documentos.as_view(), name='documentos'),
+    path('arq-app/documentos-eliminados/', views.DocumentosEliminados.as_view(), name='documentos-eliminados'),
     path('arq-app/documento/detalhes/<int:pk>/', views.DocumentoDetalhes.as_view(), name='detalhes_documento'),
     path('arq-app/documento/novo/', views.DocumentoNovo.as_view(), name='novo_documento'),
     path('arq-app/documento/editar/<int:pk>/', views.DocumentoEditar.as_view(), name='editar_documento'),

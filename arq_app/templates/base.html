@@ -74,6 +74,11 @@
             color: white;
         }
 
+        .pdf-btn{
+            background-color: #FFFFFF;
+            color: #000000;
+        }
+
         input[type="text"], select {
             height: 36px; /* ajuste conforme necessário */
             padding: 6px 12px;
@@ -122,8 +127,10 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="m-eliminacaoDropdown" role="button" data-toggle="dropdown" aria-expanded="false">Eliminação</a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="m-eliminacaoDropdown">
-                            <li><a class="dropdown-item" href="{% url 'regua-eliminacao' %}">Régua</a></li>
-                            <li> <a class="dropdown-item" href="{% url 'termos' %}">Termos</a></li>
+                            <li><a class="dropdown-item" href="{% url 'caixas-eliminadas' %}">Caixas de Arquivo (Eliminadas)</a></li>
+                            <li><a class="dropdown-item" href="{% url 'documentos-eliminados' %}">Documentos (Eliminados)</a></li>
+                            <li><a class="dropdown-item" href="{% url 'regua-eliminacao' %}">Régua de Eliminação</a></li>
+                            <li> <a class="dropdown-item" href="{% url 'termos' %}">Termos de Eliminação</a></li>
                         </ul>
                     </li>
 

@@ -1,8 +1,11 @@
+import weasyprint
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Min, Q, F
+from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
@@ -11,7 +14,48 @@ from django.views.generic import CreateView, ListView, TemplateView, UpdateView,
 from .forms import CaixaDeArquivoForm, DocumentoForm, InteressadoForm, TermoEliminacaoForm
 from .models import CaixaDeArquivo, Documento, FuncaoPC, Interessado, SerieDocumentalPC, TermoEliminacaoDocumentos
 
-# View para associar caixa a termo de eliminação
+
+@login_required
+def relatorio_eliminacao_pdf(request):
+    hoje = timezone.now().date()
+    # Buscar tipos documentais candidatos à eliminação
+    series = SerieDocumentalPC.objects.filter(destinacao='E').order_by('codigo')
+    tipos_documentais = []
+    for serie in series:
+        data_limite = hoje.replace(year=hoje.year - serie.prazo_central)
+        caixas = CaixaDeArquivo.objects.filter(
+            termoEliminacao=None,
+            documentos__serie_documental=serie,
+            documentos__data_producao__lte=data_limite
+        ).distinct().order_by('numero')
+        if caixas.exists():
+            caixas_info = []
+            for caixa in caixas:
+                docs = caixa.documentos.filter(serie_documental=serie)
+                if docs.exists():
+                    data_inicial = docs.order_by('data_producao').first().data_producao
+                    data_final = docs.order_by('data_producao').last().data_producao
+                else:
+                    data_inicial = data_final = None
+                caixas_info.append({
+                    'numero': caixa.numero,
+                    'descricao': caixa.descricao,
+                    'data_inicial': data_inicial,
+                    'data_final': data_final,
+                })
+            tipos_documentais.append({
+                'codigo': serie.codigo,
+                'nome': serie.nome,
+                'prazo_central': serie.prazo_central,
+                'caixas': caixas_info
+            })
+
+    html = render_to_string('arq_app/relatorio_eliminacao_pdf.html', {'tipos_documentais': tipos_documentais})
+    pdf = weasyprint.HTML(string=html, base_url=request.build_absolute_uri('/')).write_pdf()
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="relatorio_eliminacao.pdf"'
+    return response
+
 @login_required
 @require_POST
 def associar_termo_caixa(request):
@@ -120,6 +164,14 @@ class CaixaExcluir(LoginRequiredMixin, DeleteView):
 
         messages.success(self.request, f"Caixa {self.object} excluída com sucesso.")
         return super(CaixaExcluir,self).form_valid(form)
+
+class CaixasEliminadas(LoginRequiredMixin, ListView):
+    model = CaixaDeArquivo
+    template_name = 'arq_app/caixas_eliminadas.html'
+    context_object_name = 'caixas'
+
+    def get_queryset(self):
+        return CaixaDeArquivo.objects.filter(termoEliminacao__isnull=False).order_by('-numero')
     
 class Documentos(LoginRequiredMixin, ListView):
     model = Documento
@@ -168,6 +220,14 @@ class DocumentoNovo(LoginRequiredMixin, CreateView):
         response = super().form_valid(form)
         messages.success(self.request, f"Documento {form.instance} cadastrado com sucesso.")
         return response
+
+class DocumentosEliminados(LoginRequiredMixin, ListView):
+    model = Documento
+    template_name = 'arq_app/documentos_eliminados.html'
+    context_object_name = 'documentos'
+
+    def get_queryset(self):
+        return Documento.objects.filter(caixa__termoEliminacao__isnull=False).order_by('-id')   
 
 class Interessados(LoginRequiredMixin, ListView):
     model = Interessado
